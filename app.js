@@ -24,35 +24,23 @@ function handleFileSelect(evt) {
 				console.log('e readAsText target = ', e.target);
         console.log(e.target.result);
 
-        var micCheck = document.getElementById('display');
-        console.log(micCheck);
+        var client = document.getElementById('display');
+        console.log(client);
 
         json = JSON.parse(e.target.result);
 
         console.log(json);
 
         var data = JSON.stringify(json);
-        // micCheck.appendChild(data);
-        micCheck.insertAdjacentHTML('afterbegin', data);
+        // client.appendChild(data);
+        client.insertAdjacentHTML('afterbegin', data);
         console.log(data);
 
-        function js_traverse(o) {
-          var type = typeof o
-          if (type == "object") {
-            for (var key in o) {
-              if (key === 'tag') {
-                console.log(Object.values(key));
-              }
-              console.log("key: ", key)
-              js_traverse(o[key])
-            }
-          } else {
-            console.log(o)
-          }
-        }
+        console.log(json[0].content);
+        let hello = json[0].content;
+        let tagged = (`<${hello.tag}> ${hello.content} </${hello.tag}>`);
 
-        js_traverse(data);
-
+        client.insertAdjacentHTML('afterbegin', tagged);
 
 			}
 		})(f);
