@@ -14,7 +14,7 @@ var client = document.getElementById('display');
 let stringToSend = '';
 function sortAndSend(stuff) {
   // client.appendChild(data);
-  console.log(client);
+  // console.log(client);
   console.log(stuff);
   // console.log(json[0].content);
   // let hello = json[0].content;
@@ -24,11 +24,38 @@ function sortAndSend(stuff) {
     if (typeof thing.content.content === 'string') {
       stringToSend += `<${thing.tag}> <${thing.content.tag}> ${thing.content.content} </${thing.content.tag}> </${thing.tag}>`;
       console.log(stringToSend);
-    } else if (Array.isArray(thing.content.content) === 'true') {
+      //  sortAndSend(stuff);
+    } else if (Array.isArray(thing.content)) {
+      stringToSend += `<${thing.tag}> ${thing.content} </${thing.tag}> `;
 
+      sortAndSend(thing.content);
+      console.log(thing.content);
+
+      // stringToSend += `</${thing.content.tag}>`;
+
+    } else if (Array.isArray(thing.content.content)) {
+      stringToSend += `<${thing.content.tag}> ${thing.content.content} </${thing.content.tag}> `;
+
+      sortAndSend(thing.content.content);
+      console.log(thing.content.content);
+
+      // stringToSend += `</${thing.content.tag}>`;
+
+    } else if (typeof thing === 'object') {
+      stringToSend += `<${thing.tag}> ${thing.content} </${thing.tag}> `;
+
+      console.log(thing);
+      // sortAndSend(thing);
     }
+
+      // stringToSend += `<${thing.content.content.tag}> ${thing.content.content.content} </${thing.content.content.tag}>`;
+    else {
+      return stringToSend;
+    }
+
+    // console.log(stringToSend);
   })
-  document.getElementById('display').innerHTML = stringToSend; 
+  document.getElementById('display').innerHTML = stringToSend;
 
 
 
@@ -60,8 +87,8 @@ function handleFileSelect(evt) {
 		// Closure to capture the file information.
 		reader.onload = (function (theFile) {
 			return function (e) {
-				console.log('e readAsText = ', e);
-				console.log('e readAsText target = ', e.target);
+				// console.log('e readAsText = ', e);
+				// console.log('e readAsText target = ', e.target);
         console.log(e.target.result);
 
         json = JSON.parse(e.target.result);
@@ -69,7 +96,6 @@ function handleFileSelect(evt) {
         console.log(json);
 
         var data = JSON.stringify(json);
-
         sortAndSend(json);
         // client.insertAdjacentHTML('afterbegin', sortAndSend(json));
 			}
