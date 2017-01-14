@@ -1,10 +1,7 @@
 var json;
 
 function handleFileSelect(evt) {
-	var files = evt.target.files; // FileList object
-
-	// files is a FileList of File objects. List some properties.
-
+	var files = evt.target.files;
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
@@ -12,97 +9,40 @@ document.getElementById('files').addEventListener('change', handleFileSelect, fa
 var client = document.getElementById('display');
 
 let stringToSend = '';
+
 function sortAndSend(stuff) {
-  // client.appendChild(data);
-  // console.log(client);
-  console.log(stuff);
-  // console.log(json[0].content);
-  // let hello = json[0].content;
-  // let tagged = (`<${hello.tag}> ${hello.content} </${hello.tag}>`);
 
-  stuff.forEach(function(thing) {
-    if (typeof thing.content.content === 'string') {
-      stringToSend += `<${thing.tag}> <${thing.content.tag}> ${thing.content.content} </${thing.content.tag}> </${thing.tag}>`;
-      console.log(stringToSend);
-      //  sortAndSend(stuff);
-    } else if (Array.isArray(thing.content)) {
-      stringToSend += `<${thing.tag}> ${thing.content} </${thing.tag}> `;
-
-      sortAndSend(thing.content);
-      console.log(thing.content);
-
-      // stringToSend += `</${thing.content.tag}>`;
-
-    } else if (Array.isArray(thing.content.content)) {
-      stringToSend += `<${thing.content.tag}> ${thing.content.content} </${thing.content.tag}> `;
-
-      sortAndSend(thing.content.content);
-      console.log(thing.content.content);
-
-      // stringToSend += `</${thing.content.tag}>`;
-
-    } else if (typeof thing === 'object') {
-      stringToSend += `<${thing.tag}> ${thing.content} </${thing.tag}> `;
-
-      console.log(thing);
-      // sortAndSend(thing);
-    }
-
-      // stringToSend += `<${thing.content.content.tag}> ${thing.content.content.content} </${thing.content.content.tag}>`;
-    else {
-      return stringToSend;
-    }
-
-    // console.log(stringToSend);
-  })
-  document.getElementById('display').innerHTML = stringToSend;
-
-
-
-
-    // if (typeof thing.tag === 'string') {
-    //   stringToSend += `<${thing.tag}> ${sortAndSend([thing.content])} </${thing.tag}>`;
-    // }
-    // else if (typeof thing.content === 'object') {
-    //   stringToSend += `<${thing.content.tag}> ${sortAndSend([thing.content.content])} </${thing.content.tag}>`;
-    // } else if (typeof thing === 'string') {
-    //   stringToSend += `${sortAndSend(thing)}`;
-    // } else {
-    //   console.log(stringToSend);
-    //   return stringToSend;
-    // }
-  // })
+	stuff.forEach(function(thing) {
+		if (typeof thing.content.content === 'string') {
+			stringToSend += `<${thing.tag}> <${thing.content.tag}> ${thing.content.content} </${thing.content.tag}> </${thing.tag}>`;
+		} else if (Array.isArray(thing.content)) {
+			sortAndSend(thing.content);
+		} else if (Array.isArray(thing.content.content)) {
+			sortAndSend(thing.content.content);
+		} else if (typeof thing === 'object') {
+			stringToSend += `<${thing.tag}> ${thing.content} </${thing.tag}> `;
+		} else {
+			return stringToSend;
+		}
+	})
+	document.getElementById('display').innerHTML = stringToSend;
 };
 client.insertAdjacentHTML('afterbegin', stringToSend)
 
-
 function handleFileSelect(evt) {
-	var files = evt.target.files; // FileList object
-
-	// files is a FileList of File objects. List some properties.
+	var files = evt.target.files;
 	var output = [];
 	for (var i = 0, f; f = files[i]; i++) {
 		var reader = new FileReader();
-
-		// Closure to capture the file information.
-		reader.onload = (function (theFile) {
-			return function (e) {
-				// console.log('e readAsText = ', e);
-				// console.log('e readAsText target = ', e.target);
-        console.log(e.target.result);
-
-        json = JSON.parse(e.target.result);
-
-        console.log(json);
-
-        var data = JSON.stringify(json);
-        sortAndSend(json);
-        // client.insertAdjacentHTML('afterbegin', sortAndSend(json));
+		reader.onload = (function(theFile) {
+			return function(e) {
+				json = JSON.parse(e.target.result);
+				var data = JSON.stringify(json);
+				sortAndSend(json);
 			}
 		})(f);
 		reader.readAsText(f);
 	}
-
 }
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
